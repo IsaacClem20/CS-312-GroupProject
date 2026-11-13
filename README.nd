@@ -1,59 +1,65 @@
 # Recipe Sharing Platform
 
-A community-driven recipe-sharing web application that allows users to create, discover, and manage recipes. Users will be able to register accounts, upload recipes, search for recipes, and interact with content shared by other users.
+A community-driven web application where users can create, manage, and discover recipes. Users can register accounts, submit recipes, manage their profiles, and browse recipes shared by other users.
+
+Developed as a group project for CS 312.
 
 ## Project Overview
 
-This project is being developed as part of a group project for CS 312.
+The Recipe Sharing Platform aims to provide a centralized place for users to share recipes and discover meals based on ingredients, cuisine, meal type, and dietary preferences.
 
-### Planned Features
+### Phase 1 Features
 
 - User registration and authentication
-- Create, edit, and delete recipes
-- Browse and search recipes
-- Filter recipes by cuisine, meal type, ingredients, and dietary preferences
-- View individual recipe details
-- User profiles
-- Save favorite recipes
-- Rate and comment on recipes
+- Secure password hashing
+- User login and logout
+- Persistent user sessions
+- User profile retrieval and updates
+- Recipe submission
+- Recipe editing and deletion
+- Recipe ownership and authorization
+- Recipe browsing and display
+- Recipe searching, filtering, and sorting
+
+### Phase 2 Features
+
+Phase 2 features are outside the current development scope and are not included in the current implementation.
 
 ## Technologies Used
 
-**Frontend**
+### Frontend
 - HTML
 - CSS
 - JavaScript
 
-**Backend**
+### Backend
 - Node.js
 - Express.js
 
-**Database**
+### Database
 - PostgreSQL 15
+- pgAdmin 4
 - PostgreSQL Node.js client (`pg`)
-- pgAdmin 4 for database management
 
-**Additional Packages**
-- `bcryptjs` — Password hashing
-- `express-session` — User session management
-- `connect-pg-simple` — PostgreSQL session storage
-- `dotenv` — Environment variable management
-- `multer` — File uploads
+### Additional Packages
+- `bcryptjs` – Password hashing
+- `express-session` – Session management
+- `connect-pg-simple` – PostgreSQL session storage
+- `dotenv` – Environment variable management
+- `multer` – File upload middleware (installed; image upload functionality is not yet implemented)
 
 ## Prerequisites
 
-Before running the project, make sure you have the following installed:
+Before running the project, install:
 
 - [Node.js](https://nodejs.org/)
+- [Git](https://git-scm.com/)
 - [PostgreSQL 15](https://www.postgresql.org/)
 - [pgAdmin 4](https://www.pgadmin.org/)
-- [Git](https://git-scm.com/)
 
 ## Installation and Setup
 
 ### 1. Clone the Repository
-
-Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/IsaacClem20/CS-312-GroupProject.git
@@ -67,7 +73,7 @@ cd CS-312-GroupProject
 
 ### 2. Install Dependencies
 
-Install the required Node.js packages:
+Install all required Node.js packages:
 
 ```bash
 npm install
@@ -75,11 +81,11 @@ npm install
 
 ### 3. Configure Environment Variables
 
-Create a `.env` file in the root project directory.
+Create a `.env` file in the project root directory.
 
-Use the `.env.example` file as a template and enter your own PostgreSQL credentials.
+Use `.env.example` as a template.
 
-Example:
+Example configuration:
 
 ```env
 PORT=3000
@@ -90,45 +96,89 @@ DB_NAME=recipe_sharing_db
 DB_USER=your_postgres_username
 DB_PASSWORD=your_postgres_password
 
-SESSION_SECRET=your_own_session_secret
+SESSION_SECRET=your_own_random_secret
 ```
 
-**Important:** Never commit your `.env` file to GitHub. It contains private database credentials and application secrets.
+Replace the database username and password with your own local PostgreSQL credentials.
+
+Generate a unique session secret for your own environment.
+
+**Important:** Never commit or share your actual `.env` file. It contains private database credentials and application secrets.
 
 ### 4. Set Up the PostgreSQL Database
 
 Open pgAdmin 4 and connect to your local PostgreSQL server.
 
 1. Create a database named `recipe_sharing_db`.
-2. Open the Query Tool for the new database.
-3. Open and execute `db/schema.sql` to create the database tables.
-4. Open and execute `db/seed.sql` to insert the initial dietary tags.
+2. Open the Query Tool for that database.
+3. Execute `db/schema.sql` to create the database tables.
+4. Execute `db/seed.sql` to populate the initial dietary tags.
 
-The database should now be ready for the application.
+The database should now contain the following tables:
 
-### 5. Start the Application
+- `users`
+- `recipes`
+- `dietary_tags`
+- `recipe_dietary_tags`
 
-Start the development server:
+The PostgreSQL session table is created automatically when the session store initializes.
+
+### 5. Start the Development Server
+
+Run:
 
 ```bash
 npm run dev
 ```
 
-The application should now be running at:
+The Express server should start at:
 
 http://localhost:3000
 
-## API Testing
+To run the application without development watch mode:
 
-The following endpoints are currently available for basic server and database testing:
+```bash
+npm start
+```
 
-| Endpoint | Purpose |
-|---|---|
-| `/` | Confirms that the Express server is running |
-| `/api/health` | Checks the server health |
-| `/api/db-test` | Tests the PostgreSQL database connection |
+## API Endpoints
 
-You can open these endpoints directly in your browser while the development server is running.
+All API endpoints use the `/api` prefix unless otherwise specified.
+
+### Authentication
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register a new account |
+| POST | `/api/auth/login` | Log in to an account |
+| POST | `/api/auth/logout` | Log out and destroy the session |
+
+### User Profiles
+
+All profile endpoints require authentication.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/users/me` | Retrieve the logged-in user's profile |
+| PUT | `/api/users/me` | Update the logged-in user's username and email |
+
+### Recipe Management
+
+All recipe-management endpoints require authentication.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/recipes` | Submit a new recipe |
+| PUT | `/api/recipes/:id` | Edit a recipe owned by the logged-in user |
+| DELETE | `/api/recipes/:id` | Delete a recipe owned by the logged-in user |
+
+### Utility Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Basic server status message |
+| GET | `/api/health` | Check server health |
+| GET | `/api/db-test` | Test PostgreSQL connectivity |
 
 ## Project Structure
 
@@ -139,6 +189,14 @@ recipe_tracker/
 │   ├── pool.js
 │   ├── schema.sql
 │   └── seed.sql
+│
+├── middleware/
+│   └── authMiddleware.js
+│
+├── routes/
+│   ├── auth.js
+│   ├── users.js
+│   └── recipes.js
 │
 ├── public/
 │   └── index.html
@@ -158,21 +216,12 @@ recipe_tracker/
 └── server.js
 ```
 
-*Note: Update this structure as the project grows and additional folders and files are added.*
+## Security and Authorization
 
-## Development Notes
-
-- The backend uses Express.js to handle server requests.
-- PostgreSQL stores application data.
-- Database connections are managed through a connection pool in `db/pool.js`.
-- Environment variables are used to keep credentials and configuration separate from source code.
-- The project uses Git and GitHub for version control and collaboration.
-
-## Contributors
-
-- Isaac Clement
-- Viviana Mendoza
-
-## Course
-
-CS 312 — Group Project
+- Passwords are hashed using bcrypt before being stored.
+- User sessions are stored in PostgreSQL.
+- Protected routes require an authenticated session.
+- Recipe ownership is determined by the logged-in user's database ID.
+- Users cannot edit or delete recipes belonging to other accounts.
+- SQL queries use parameterized values to help prevent SQL injection.
+- Password hashes
