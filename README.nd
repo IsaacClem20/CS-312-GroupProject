@@ -1,0 +1,178 @@
+# Recipe Sharing Platform
+
+A community-driven recipe-sharing web application that allows users to create, discover, and manage recipes. Users will be able to register accounts, upload recipes, search for recipes, and interact with content shared by other users.
+
+## Project Overview
+
+This project is being developed as part of a group project for CS 312.
+
+### Planned Features
+
+- User registration and authentication
+- Create, edit, and delete recipes
+- Browse and search recipes
+- Filter recipes by cuisine, meal type, ingredients, and dietary preferences
+- View individual recipe details
+- User profiles
+- Save favorite recipes
+- Rate and comment on recipes
+
+## Technologies Used
+
+**Frontend**
+- HTML
+- CSS
+- JavaScript
+
+**Backend**
+- Node.js
+- Express.js
+
+**Database**
+- PostgreSQL 15
+- PostgreSQL Node.js client (`pg`)
+- pgAdmin 4 for database management
+
+**Additional Packages**
+- `bcryptjs` — Password hashing
+- `express-session` — User session management
+- `connect-pg-simple` — PostgreSQL session storage
+- `dotenv` — Environment variable management
+- `multer` — File uploads
+
+## Prerequisites
+
+Before running the project, make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/)
+- [PostgreSQL 15](https://www.postgresql.org/)
+- [pgAdmin 4](https://www.pgadmin.org/)
+- [Git](https://git-scm.com/)
+
+## Installation and Setup
+
+### 1. Clone the Repository
+
+Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/IsaacClem20/CS-312-GroupProject.git
+```
+
+Navigate into the project directory:
+
+```bash
+cd CS-312-GroupProject
+```
+
+### 2. Install Dependencies
+
+Install the required Node.js packages:
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root project directory.
+
+Use the `.env.example` file as a template and enter your own PostgreSQL credentials.
+
+Example:
+
+```env
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=recipe_sharing_db
+DB_USER=your_postgres_username
+DB_PASSWORD=your_postgres_password
+
+SESSION_SECRET=your_own_session_secret
+```
+
+**Important:** Never commit your `.env` file to GitHub. It contains private database credentials and application secrets.
+
+### 4. Set Up the PostgreSQL Database
+
+Open pgAdmin 4 and connect to your local PostgreSQL server.
+
+1. Create a database named `recipe_sharing_db`.
+2. Open the Query Tool for the new database.
+3. Open and execute `db/schema.sql` to create the database tables.
+4. Open and execute `db/seed.sql` to insert the initial dietary tags.
+
+The database should now be ready for the application.
+
+### 5. Start the Application
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application should now be running at:
+
+http://localhost:3000
+
+## API Testing
+
+The following endpoints are currently available for basic server and database testing:
+
+| Endpoint | Purpose |
+|---|---|
+| `/` | Confirms that the Express server is running |
+| `/api/health` | Checks the server health |
+| `/api/db-test` | Tests the PostgreSQL database connection |
+
+You can open these endpoints directly in your browser while the development server is running.
+
+## Project Structure
+
+```text
+recipe_tracker/
+│
+├── db/
+│   ├── pool.js
+│   ├── schema.sql
+│   └── seed.sql
+│
+├── public/
+│   └── index.html
+│
+├── css/
+│   └── style.css
+│
+├── js/
+│   └── app.js
+│
+├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── README.md
+└── server.js
+```
+
+*Note: Update this structure as the project grows and additional folders and files are added.*
+
+## Development Notes
+
+- The backend uses Express.js to handle server requests.
+- PostgreSQL stores application data.
+- Database connections are managed through a connection pool in `db/pool.js`.
+- Environment variables are used to keep credentials and configuration separate from source code.
+- The project uses Git and GitHub for version control and collaboration.
+
+## Contributors
+
+- Isaac Clement
+- Viviana Mendoza
+
+## Course
+
+CS 312 — Group Project
