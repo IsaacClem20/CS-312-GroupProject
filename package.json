@@ -1,0 +1,31 @@
+{
+  "name": "recipe_tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+ "scripts": {
+  "start": "node server.js",
+  "dev": "node --watch server.js"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IsaacClem20/CS-312-GroupProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/IsaacClem20/CS-312-GroupProject/issues"
+  },
+  "homepage": "https://github.com/IsaacClem20/CS-312-GroupProject#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "multer": "^2.5.0",
+    "pg": "^8.23.1"
+  }
+}
