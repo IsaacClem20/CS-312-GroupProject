@@ -1,3 +1,10 @@
+// Required imports
+const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
+const authRoutes = require("./routes/auth");
+const requireAuth = require("./middleware/authMiddleware");
+const userRoutes = require("./routes/users");
+const recipeRoutes = require("./routes/recipes");
 
 // Import PostgreSQL connection pool
 const pool = require("./db/pool");
@@ -17,8 +24,44 @@ app.use(express.json());
 // Configure middleware to parse form submissions
 app.use(express.urlencoded({ extended: true }));
 
+// Configure session management using PostgreSQL
+app.use(
+    session({
+        store: new PgSession({
+            pool: pool,
+            createTableIfMissing: true
+        }),
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24, // 24 hours
+            httpOnly: true,
+            secure: false, // Set to true when deploying with HTTPS
+            sameSite: "lax"
+        }
+    })
+);
+
 // Set the server port
 const PORT = process.env.PORT || 3000;
+
+// Authentication routes
+app.use("/api/auth", authRoutes);
+
+// Temporary endpoint to test authentication middleware
+app.get("/api/protected-test", requireAuth, (req, res) => {
+    res.json({
+        message: "You are authenticated!",
+        user: req.session.user
+    });
+});
+
+// User profile routes
+app.use("/api/users", userRoutes);
+
+// Recipe management routes
+app.use("/api/recipes", recipeRoutes);
 
 // Basic homepage route
 app.get("/", (req, res) => {
